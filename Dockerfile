@@ -1,6 +1,6 @@
-FROM ubuntu:latest
+FROM node:buster
 
 
-RUN apt update && apt install -y node:buster wget && npm install -g tldr && tldr test; 
+RUN apt update && apt install -y wget && npm install -g tldr && tldr test; 
 
 CMD /bin/bash
