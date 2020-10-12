@@ -11,8 +11,8 @@ jobs:
       - name: Build Image
         id: build_image
         run: |
-          docker build -t JaredStemper/CSC:build -f ./Dockerfile .
-          export IMAGE_ID_TEMP=$(sudo docker images --filter=reference=JaredStemper/CSC:build --format "{{.ID}}")
+          docker build -t jaredstemper/csc-lab:build -f ./Dockerfile .
+          export IMAGE_ID_TEMP=$(sudo docker images --filter=reference=jaredstemper/csc-lab:build --format "{{.ID}}")
           echo "##[set-output name=image_id;]$IMAGE_ID_TEMP"
       - name: Login
         env:
@@ -25,40 +25,40 @@ jobs:
         env:
           image_id: ${{ steps.build_image.outputs.image_id }}
         run: |
-          docker tag $image_id JaredStemper/CSC:$GITHUB_SHA
-          docker push JaredStemper/CSC:$GITHUB_SHA
+          docker tag $image_id jaredstemper/csc-lab:$GITHUB_SHA
+          docker push jaredstemper/csc-lab:$GITHUB_SHA
       - name: Deploy Run Number
         if: ${{ github.head_ref == '' && github.sha != '' }}
         env:
           image_id: ${{ steps.build_image.outputs.image_id }}
         run: |
-          docker tag $image_id JaredStemper/CSC:$GITHUB_RUN_NUMBER
-          docker push JaredStemper/CSC:$GITHUB_RUN_NUMBER
+          docker tag $image_id jaredstemper/csc-lab:$GITHUB_RUN_NUMBER
+          docker push jaredstemper/csc-lab:$GITHUB_RUN_NUMBER
       - name: Deploy Latest
         if: ${{ github.head_ref == '' && github.ref == 'refs/heads/master' }}
         env:
           image_id: ${{ steps.build_image.outputs.image_id }}
         run: |
-          docker tag $image_id JaredStemper/CSC:latest
-          docker push JaredStemper/CSC:latest
+          docker tag $image_id jaredstemper/csc-lab:latest
+          docker push jaredstemper/csc-lab:latest
       - name: Deploy Develop
         if: ${{ github.head_ref == '' && startsWith(github.ref, 'refs/heads/dev') }}
         env:
           image_id: ${{ steps.build_image.outputs.image_id }}
         run: |
-          docker tag $image_id JaredStemper/CSC:latest-develop
-          docker push JaredStemper/CSC:latest-develop
+          docker tag $image_id jaredstemper/csc-lab:latest-develop
+          docker push jaredstemper/csc-lab:latest-develop
       - name: Deploy Branch
         if: ${{ github.head_ref == '' && startsWith(github.ref, 'refs/heads/') }}
         env:
           image_id: ${{ steps.build_image.outputs.image_id }}
         run: |
-          docker tag $image_id JaredStemper/CSC:${GITHUB_REF##*/}
-          docker push JaredStemper/CSC:${GITHUB_REF##*/}
+          docker tag $image_id jaredstemper/csc-lab:${GITHUB_REF##*/}
+          docker push jaredstemper/csc-lab:${GITHUB_REF##*/}
       - name: Deploy Tag
         if: ${{ github.head_ref == '' && startsWith(github.ref, 'refs/tags/') }}
         env:
           image_id: ${{ steps.build_image.outputs.image_id }}
         run: |
-          docker tag $image_id JaredStemper/CSC:${GITHUB_REF##*/}
-          docker push JaredStemper/CSC:${GITHUB_REF##*/}
+          docker tag $image_id jaredstemper/csc-lab:${GITHUB_REF##*/}
+          docker push jaredstemper/csc-lab:${GITHUB_REF##*/}
