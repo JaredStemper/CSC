@@ -1,6 +1,6 @@
 FROM ubuntu:builder AS builder
 
-RUN xcsc build     --with github.com/csc/cloudflare@latest
+RUN xcsc build     --with github.com/csc/ubuntu_practice@latest
 
 FROM ubuntu:latest
 
